@@ -13,16 +13,20 @@ to use mock server to write a test to check the fourth person that mock server s
 
 4 Another test checking that component displays an error message saying "418 I'm a tea pot 🫖, silly" in the scenario the API returns Status Code 418 (I’m a tea pot: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418 )
 
-## Available Scripts
+## Running the application
 
-In the project directory, you can run:
+To start the application run:
 
-### `npm start`
+```
+npm install
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Followed by:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+npm start
+```
 
-### `npm test`
+You should then be able to access the application by opening the browser and visiting
+
+[http://localhost:3000](http://localhost:3000)
