@@ -1,13 +1,23 @@
+import { useState, useEffect } from "react";
 import "./App.css";
 
-// Have the React app call the Star Wars API people end point and display the first person on the page.
-// 👉 Next, add msw so you can mock (or "stub") the API response.
-// 👉 Use your mock server to write a test to check the first person that your mock server returns is being correctly rendered to the page.
-
 const App: React.FC = () => {
+  const [swCharacter, setSwCharacter] = useState("NoName");
+
+  const getCharacters = async () => {
+    const apiResponse = await fetch(`https://swapi.dev/api/people/4`);
+    const json = await apiResponse.json();
+    setSwCharacter(json.name);
+  };
+
+  useEffect(() => {
+    getCharacters();
+  });
+
   return (
     <div className="App">
       <header className="App-header">SWAPI - The Star Wars API</header>
+      <p>Fourth Person from the Star War People - {swCharacter}</p>
     </div>
   );
 };
