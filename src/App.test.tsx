@@ -32,12 +32,12 @@ describe("App component", () => {
 
   it("loads and renders Fourth person", async () => {
     render(<App />);
-    await screen.findAllByText(/Fourth Person from the Star War People/i);
+    await screen.findByText(/Fourth Person from the Star War People/i);
     const text = screen.getByText(/Darth Vader/i);
     expect(text).toBeInTheDocument();
   });
 
-  test("handles server error 500", async () => {
+  it("handles server error 500", () => {
     server.use(
       rest.get("https://swapi.dev/api/people/4", (req, res, ctx) => {
         return res(ctx.status(500));
@@ -48,5 +48,18 @@ describe("App component", () => {
       /Oops... something went wrong, try again 🤕/i
     );
     expect(text).toBeInTheDocument();
+  });
+
+  it("handles server error 418", async () => {
+    server.use(
+      rest.get("https://swapi.dev/api/people/4", (req, res, ctx) => {
+        return res(ctx.status(418));
+      })
+    );
+    render(<App />);
+    await screen.findByText(/418 I'm a tea pot 🫖, silly 🤕/i);
+    expect(
+      screen.getByText(/418 I'm a tea pot 🫖, silly 🤕/i)
+    ).toBeInTheDocument();
   });
 });

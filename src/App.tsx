@@ -3,11 +3,18 @@ import "./App.css";
 
 const App: React.FC = () => {
   const [swCharacter, setSwCharacter] = useState();
+  const [error, setError] = useState(
+    "Oops... something went wrong, try again 🤕"
+  );
 
   const getCharacters = async () => {
     const apiResponse = await fetch(`https://swapi.dev/api/people/4`);
-    const json = await apiResponse.json();
-    setSwCharacter(json.name);
+    if (apiResponse.ok) {
+      const json = await apiResponse.json();
+      setSwCharacter(json.name);
+    } else if (apiResponse.status === 418) {
+      setError("418 I'm a tea pot 🫖, silly 🤕");
+    }
   };
 
   useEffect(() => {
@@ -20,7 +27,7 @@ const App: React.FC = () => {
       {swCharacter && (
         <p>Fourth Person from the Star War People - {swCharacter}</p>
       )}
-      {!swCharacter && <p>Oops... something went wrong, try again 🤕</p>}
+      {!swCharacter && <p>{error}</p>}
     </div>
   );
 };
