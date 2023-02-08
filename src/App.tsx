@@ -20,6 +20,7 @@ const App: React.FC = () => {
       {swCharacter && (
         <p>Fourth Person from the Star War People - {swCharacter}</p>
       )}
+      {!swCharacter && <p>Oops... something went wrong, try again 🤕</p>}
     </div>
   );
 };

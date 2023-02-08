@@ -26,14 +26,27 @@ describe("App component", () => {
 
   it("renders header", () => {
     render(<App />);
-    const headerText = screen.getByText(/SWAPI - The Star Wars API/i);
-    expect(headerText).toBeInTheDocument();
+    const header = screen.getByText(/SWAPI - The Star Wars API/i);
+    expect(header).toBeInTheDocument();
   });
 
   it("loads and renders Fourth person", async () => {
     render(<App />);
     await screen.findAllByText(/Fourth Person from the Star War People/i);
     const text = screen.getByText(/Darth Vader/i);
+    expect(text).toBeInTheDocument();
+  });
+
+  test("handles server error 500", async () => {
+    server.use(
+      rest.get("https://swapi.dev/api/people/4", (req, res, ctx) => {
+        return res(ctx.status(500));
+      })
+    );
+    render(<App />);
+    const text = screen.getByText(
+      /Oops... something went wrong, try again 🤕/i
+    );
     expect(text).toBeInTheDocument();
   });
 });
