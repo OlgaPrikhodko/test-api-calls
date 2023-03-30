@@ -1,33 +1,25 @@
-import { useState, useEffect } from "react";
 import "./App.css";
+import { useFetchData } from "./hooks/useFetchData";
+import { API_BASE_URL } from "./config/config";
+import { Character, StarWarsCharacter } from "./components/StarWarsCharacter";
+import { outputFetchResult } from "./utils/outputFetchResults";
 
 const App: React.FC = () => {
-  const [swCharacter, setSwCharacter] = useState();
-  const [error, setError] = useState(
-    "Oops... something went wrong, try again 🤕"
+  const { data, error, isFetching, status } = useFetchData<Character>(
+    `${API_BASE_URL}/people/4/`
   );
-
-  const getCharacters = async () => {
-    const apiResponse = await fetch(`https://swapi.dev/api/people/4`);
-    if (apiResponse.ok) {
-      const json = await apiResponse.json();
-      setSwCharacter(json.name);
-    } else if (apiResponse.status === 418) {
-      setError("418 I'm a tea pot 🫖, silly 🤕");
-    }
-  };
-
-  useEffect(() => {
-    getCharacters();
-  });
 
   return (
     <div className="App">
       <header className="App-header">SWAPI - The Star Wars API</header>
-      {swCharacter && (
-        <p>Fourth Person from the Star War People - {swCharacter}</p>
+      {isFetching && "Loading..."}
+      {!isFetching && (
+        <>
+          {outputFetchResult(status, error, data, data => (
+            <StarWarsCharacter name={data.name} />
+          ))}
+        </>
       )}
-      {!swCharacter && <p>{error}</p>}
     </div>
   );
 };
